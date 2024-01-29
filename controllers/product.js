@@ -22,6 +22,8 @@ export const getAllProducts = async (req, res) => {
     }
 }
 
+
+
 export const getProductById = async (req, res) => {
     if (!mongoose.isValidObjectId(req.params.id))
         return res.status(400).send("invalid paramter id");
@@ -66,7 +68,7 @@ export const deleteProductById = async (req, res) => {
 export const addPoduct = async (req, res) => {
     let { name, size, color, company, category, price, imgUrl } = req.body;
     let validate = productValidator(req.body);
-    if (validate)//אם יש שגיאות
+    if (validate)
         return res.status(400).send(validate);
     let sameProduct = await Product.findOne({ name, size, company });
     if (sameProduct)

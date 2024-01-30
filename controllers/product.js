@@ -70,7 +70,7 @@ export const addPoduct = async (req, res) => {
     let validate = productValidator(req.body);
     if (validate)
         return res.status(400).send(validate);
-    let sameProduct = await Product.findOne({ name, size, company });
+    let sameProduct = await Product.findOne({ name, company });
     if (sameProduct)
         return res.status(409).send("A product with the same name and size already exists.");
 

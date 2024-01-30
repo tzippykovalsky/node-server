@@ -22,7 +22,7 @@ export const productValidator = (productToValidate) => {
     let productJoi = Joi.object({
         name: Joi.string().min(3).required(),
         price: Joi.number().min(0).required(),
-        size: Joi.string().min(0).required(),
+        size: Joi.string().min(0),
         company: Joi.string().min(2).required(),
         
     }).unknown();//מאפשר לשאר השדות להכנס ללא בדיקות

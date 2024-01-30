@@ -1,5 +1,5 @@
 
-import { Product, productValidator } from "../models/product.js";
+import { Product, productValidator, productValidator2 } from "../models/product.js";
 import mongoose from "mongoose";
 
 
@@ -66,7 +66,7 @@ export const deleteProductById = async (req, res) => {
 
 
 export const addPoduct = async (req, res) => {
-    let { name, size, color, company, category, price, imgUrl } = req.body;
+    let { name, size, color, company, category, price, imgUrl, quantityInStock } = req.body;
     let validate = productValidator(req.body);
     if (validate)
         return res.status(400).send(validate);
@@ -76,7 +76,7 @@ export const addPoduct = async (req, res) => {
 
 
     try {
-        let newProduct = await Product.create({ name, size, color, company, category, price, imgUrl, userAdded: req.myUser._id })
+        let newProduct = await Product.create({ name, size, color, company, category, price, imgUrl, userAdded: req.myUser._id, quantityInStock })
         res.status(201).json(newProduct)
     }
     catch (err) {
@@ -89,30 +89,31 @@ export const addPoduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     try {
         let { id } = req.params;
-        let { name, size, color, company, category, price, imgUrl } = req.body;
+        let { name, size, color, company, category, price, imgUrl, quantityInStock } = req.body;
         if (!mongoose.isValidObjectId(id))
             return res.status(400).send("invalid paramter id");
 
-        if (name || price || size || company) {
-            let validate = productValidator(req.body);
-            if (validate)
-                return res.status(400).send(validate);
-        }
+
+        let validate = productValidator2(req.body);
+        if (validate)
+            return res.status(400).send(validate);
 
 
-        let productToApdate = await Product.findById(id);
-        if (!productToApdate)
+
+        let productToUpdate = await Product.findById(id);
+        if (!productToUpdate)
             return res.status(404).send("no product with such id");
-        productToApdate.name = name || productToApdate.name;
-        productToApdate.size = size || productToApdate.size;
-        productToApdate.color = color || productToApdate.color;
-        productToApdate.company = company || productToApdate.company;
-        productToApdate.category = category || productToApdate.category;
-        productToApdate.price = price || productToApdate.price;
-        productToApdate.imgUrl = imgUrl || productToApdate.imgUrl;
+        productToUpdate.name = name || productToUpdate.name;
+        productToUpdate.size = size || productToUpdate.size;
+        productToUpdate.color = color || productToUpdate.color;
+        productToUpdate.company = company || productToUpdate.company;
+        productToUpdate.category = category || productToUpdate.category;
+        productToUpdate.price = price || productToUpdate.price;
+        productToUpdate.imgUrl = imgUrl || productToUpdate.imgUrl;
+        productToUpdate.quantityInStock = quantityInStock || productToUpdate.quantityInStock;
 
-        await productToApdate.save();
-        res.status(200).json(productToApdate);
+        await productToUpdate.save();
+        res.status(200).json(productToUpdate);
 
     }
     catch (err) {

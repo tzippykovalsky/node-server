@@ -13,14 +13,14 @@ config();
 connectToDB();
 const app = express();
 
+app.use(cors());
 app.use(morgan("common"))//פרוט בטרמינל שמישהו ניגש לשרת
 app.use(express.static('staticFile/images'))
 app.use(express.json())
-app.use(cors());
-app.use(errorsHndling);
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter)
+app.use(errorsHndling);
 
 let port = process.env.PORT || 9181;
 app.listen(port, () => {

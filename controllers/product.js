@@ -13,7 +13,7 @@ export const getAllProducts = async (req, res) => {
             .skip((page - 1) * itemsPerPage)//דילוג- מביא אותי לפריטים הספציפיים לפי העמוד שביקשתי
             .limit(itemsPerPage)
             .sort({ "name": 1 })
-
+console.log(allProducts);
         res.json(allProducts);
     }
     catch (err) {

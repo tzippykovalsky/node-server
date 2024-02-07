@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 
 export const getAllProducts = async (req, res) => {
-    let { searchText, page, itemsPerPage = 10 } = req.query;
+    let { searchText, page, itemsPerPage = 5 } = req.query;
     try {
         let filterObject = {}
         if (searchText)
@@ -23,6 +23,18 @@ console.log(allProducts);
 }
 
 
+export const getCountPages = async (req, res) => {
+    let { itemsPerPage = 5 } = req.query;
+    try {
+        let count = await Product.find({}).count();
+        let numPages = count / itemsPerPage;
+        res.json(numPages).status(200)
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send("an error in getting num pages")
+    }
+}
 
 export const getProductById = async (req, res) => {
     if (!mongoose.isValidObjectId(req.params.id))

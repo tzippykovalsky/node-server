@@ -5,6 +5,8 @@ import { authAdmin } from "../middlewares/auth.js";
 
 const router = express.Router();
 
+
+router.get("/numPages", productController.getCountPages);
 router.get("/", productController.getAllProducts);
 router.get("/:id", productController.getProductById);
 router.post("/",authAdmin, productController.addPoduct);

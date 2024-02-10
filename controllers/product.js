@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 
 export const getAllProducts = async (req, res) => {
-    let { searchText, page, itemsPerPage = 10 } = req.query;
+    let { searchText, page, itemsPerPage = 5 } = req.query;
     try {
         let filterObject = {}
         if (searchText)
@@ -13,7 +13,7 @@ export const getAllProducts = async (req, res) => {
             .skip((page - 1) * itemsPerPage)//דילוג- מביא אותי לפריטים הספציפיים לפי העמוד שביקשתי
             .limit(itemsPerPage)
             .sort({ "name": 1 })
-
+        console.log(allProducts);
         res.json(allProducts);
     }
     catch (err) {
@@ -21,7 +21,18 @@ export const getAllProducts = async (req, res) => {
         console.log(err.message);
     }
 }
-
+export const getCountPages = async (req, res) => {
+    let { itemsPerPage = 5 } = req.query;
+    try {
+        let count = await Product.find({}).count();
+        let numPages = count / itemsPerPage;
+        res.json(numPages).status(200)
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send("an error in getting num pages")
+    }
+}
 
 
 export const getProductById = async (req, res) => {

@@ -19,6 +19,7 @@ export const signUp = async (req, res) => {
 
         let token = generateToken(newUser);
         let { _id, userName: name, role, email: mail, address} = newUser;
+        console.log(newUser);
         res.status(201).json({ _id, userName: name, role, email: mail, address, token });
 
     }

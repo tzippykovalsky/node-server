@@ -78,7 +78,7 @@ export const deleteProductById = async (req, res) => {
 
 
 export const addPoduct = async (req, res) => {
-    let { name, size, color, company, category, price, imgUrl, quantityInStock } = req.body;
+    let { name, size, color, company, category, price, imgUrl,imgUrl2, quantityInStock } = req.body;
     let validate = productValidator(req.body);
     if (validate)
         return res.status(400).send(validate);
@@ -88,7 +88,7 @@ export const addPoduct = async (req, res) => {
 
 
     try {
-        let newProduct = await Product.create({ name, size, color, company, category, price, imgUrl, userAdded: req.myUser._id, quantityInStock })
+        let newProduct = await Product.create({ name, size, color, company, category, price,imgUrl2, imgUrl, userAdded: req.myUser._id, quantityInStock })
         res.status(201).json(newProduct)
     }
     catch (err) {
@@ -101,7 +101,7 @@ export const addPoduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     try {
         let { id } = req.params;
-        let { name, size, color, company, category, price, imgUrl, quantityInStock } = req.body;
+        let { name, size, color, company, category, price, imgUrl,imgUrl2, quantityInStock } = req.body;
         if (!mongoose.isValidObjectId(id))
             return res.status(400).send("invalid paramter id");
 
@@ -122,6 +122,7 @@ export const updateProduct = async (req, res) => {
         productToUpdate.category = category || productToUpdate.category;
         productToUpdate.price = price || productToUpdate.price;
         productToUpdate.imgUrl = imgUrl || productToUpdate.imgUrl;
+        productToUpdate.imgUrl2 = imgUrl2 || productToUpdate.imgUrl2;
         productToUpdate.quantityInStock = quantityInStock || productToUpdate.quantityInStock;
 
         await productToUpdate.save();

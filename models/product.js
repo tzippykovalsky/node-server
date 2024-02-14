@@ -10,6 +10,7 @@ const productSchema = mongoose.Schema({
     dateAdded:{ type: Date, default: Date.now() },
     price: Number,
     imgUrl: String,
+    imgUrl2: String,
     userAdded: String,
     inSale: { type: Boolean, default: false },
     quantityInStock:Number

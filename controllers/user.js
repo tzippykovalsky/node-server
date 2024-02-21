@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { User, userValidator, userValidator2 } from "../models/user.js"
 import bcrypt from "bcryptjs";
 import { generateToken } from "../config/jwt.js";
+import nodemailer from 'nodemailer';
 
 
 export const signUp = async (req, res) => {
@@ -90,3 +91,43 @@ export const getUserById = async (req, res) => {
 }
 
 
+
+
+export const sendEmail = async (req, res) => {
+    
+    const { to, subject, text } = req.body;
+    const websiteUrl = 'http://localhost:3000'; // Replace this with your website URL
+
+    // Create a Nodemailer transporter
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.MAIL,
+            pass: process.env.PASS_MAIL,
+        },
+        tls: {
+            rejectUnauthorized: false 
+        }
+    });
+
+    // HTML content for the email with a button linking to your website
+    let mailOptions = {
+        from: process.env.MAIL,
+        to: to,
+        subject: subject,
+     html: `<p style="direction: rtl; font-family: 'Arial', sans-serif; font-size: 16px; margin-bottom:100px;">${text}</p>
+               <p style="text-align: right; position: absolute; bottom: 1000px; right: 50px;">
+                   <a href="${websiteUrl}" style="padding: 10px 20px; background-color: #000; color: #fff; text-decoration: none; border-radius: 5px; font-size: 18px;">בקר באתר</a>
+               </p>`,
+               
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully');
+        res.status(200).send('Email sent successfully');
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).send('Failed to send email');
+    }
+}

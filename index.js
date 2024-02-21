@@ -20,7 +20,9 @@ app.use(express.json())
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter)
+app.use(express.urlencoded({ extended: false }));
 app.use(errorsHndling);
+
 
 let port = process.env.PORT || 9181;
 app.listen(port, () => {

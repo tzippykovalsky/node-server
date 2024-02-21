@@ -9,6 +9,7 @@ router.get("/", authAdmin, userController.getAllUsers);
 router.get("/:id", authAdmin, userController.getUserById);
 router.post("/signup", userController.signUp);
 router.post("/", userController.signIn);
+router.post("/sendMail",userController.sendEmail);
 
 export default router;
 

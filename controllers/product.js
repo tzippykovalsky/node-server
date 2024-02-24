@@ -76,19 +76,32 @@ export const deleteProductById = async (req, res) => {
     }
 }
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-      cb(null, 'staticFile/images/');
-    },
-    filename: function(req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    }
-  });
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//       cb(null, 'staticFile/images/');
+//     },
+//     filename: function(req, file, cb) {
+//       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+//       cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+//     }
+//   });
   
-  const upload = multer({ storage: storage }).single('file');
+//   const upload = multer({ storage: storage }).single('file');
 
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'staticFile/images/');
+    },
+    filename: function (req, file, cb) {
+        // Extract the original filename from the file object
+        const originalFilename = file.originalname;
+
+        cb(null, originalFilename);
+    }
+});
+
+const upload = multer({ storage: storage }).single('file');
 
 
 export const addPoduct = async (req, res) => {
@@ -99,7 +112,7 @@ export const addPoduct = async (req, res) => {
           console.error(err);
           return res.status(500).send('Error uploading image.');
         }
-    
+        let originalFilename = req.file.originalname;
         let { name, size, color, company, category, price, imgUrl, imgUrl2, quantityInStock } = req.body;
         let validate = productValidator(req.body);
     
@@ -114,7 +127,7 @@ export const addPoduct = async (req, res) => {
         }
     
         try {
-          let newProduct = await Product.create({ name, size, color, company, category, price, imgUrl, imgUrl2, quantityInStock, userAdded: req.myUser._id });
+          let newProduct = await Product.create({ name, size, color, company, category, price, imgUrl:originalFilename, imgUrl2, quantityInStock, userAdded: req.myUser._id });
           res.status(201).json(newProduct);
         } catch (err) {
           console.error(err);

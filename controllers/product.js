@@ -1,7 +1,8 @@
 
 import { Product, productValidator, productValidator2 } from "../models/product.js";
 import mongoose from "mongoose";
-
+import multer from 'multer';
+import path from 'path';
 
 export const getAllProducts = async (req, res) => {
     let { searchText, page, itemsPerPage = 5 } = req.query;
@@ -75,28 +76,72 @@ export const deleteProductById = async (req, res) => {
     }
 }
 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, 'staticFile/images/');
+    },
+    filename: function(req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+  });
+  
+  const upload = multer({ storage: storage }).single('file');
+
+
 
 
 export const addPoduct = async (req, res) => {
-    let { name, size, color, company, category, price, imgUrl,imgUrl2, quantityInStock } = req.body;
-    let validate = productValidator(req.body);
-    if (validate)
-        return res.status(400).send(validate);
-    let sameProduct = await Product.findOne({ name, company });
-    if (sameProduct)
-        return res.status(409).send("A product with the same name and size already exists.");
+    
+
+    upload(req, res, async (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Error uploading image.');
+        }
+    
+        let { name, size, color, company, category, price, imgUrl, imgUrl2, quantityInStock } = req.body;
+        let validate = productValidator(req.body);
+    
+        if (validate) {
+          return res.status(400).send(validate);
+        }
+    
+        let sameProduct = await Product.findOne({ name, company });
+    
+        if (sameProduct) {
+          return res.status(409).send("A product with the same name and size already exists.");
+        }
+    
+        try {
+          let newProduct = await Product.create({ name, size, color, company, category, price, imgUrl, imgUrl2, quantityInStock, userAdded: req.myUser._id });
+          res.status(201).json(newProduct);
+        } catch (err) {
+          console.error(err);
+          return res.status(400).send("Problem in adding a new product.");
+        }
+      });
+
+// export const addPoduct = async (req, res) => {
+//     let { name, size, color, company, category, price, imgUrl,imgUrl2, quantityInStock } = req.body;
+//     let validate = productValidator(req.body);
+//     if (validate)
+//         return res.status(400).send(validate);
+//     let sameProduct = await Product.findOne({ name, company });
+//     if (sameProduct)
+//         return res.status(409).send("A product with the same name and size already exists.");
 
 
-    try {
-        let newProduct = await Product.create({ name, size, color, company, category, price,imgUrl2, imgUrl, userAdded: req.myUser._id, quantityInStock })
-        res.status(201).json(newProduct)
-    }
-    catch (err) {
-        console.log(err);
-        return res.status(400).send("problem in adding a new product")
+//     try {
+//         let newProduct = await Product.create({ name, size, color, company, category, price,imgUrl2, imgUrl, userAdded: req.myUser._id, quantityInStock })
+//         res.status(201).json(newProduct)
+//     }
+//     catch (err) {
+//         console.log(err);
+//         return res.status(400).send("problem in adding a new product")
 
-    }
-}
+//     }
+// }
 
 export const updateProduct = async (req, res) => {
     try {

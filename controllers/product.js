@@ -121,6 +121,7 @@ export const addPoduct = async (req, res) => {
           return res.status(400).send("Problem in adding a new product.");
         }
       });
+}
 
 // export const addPoduct = async (req, res) => {
 //     let { name, size, color, company, category, price, imgUrl,imgUrl2, quantityInStock } = req.body;

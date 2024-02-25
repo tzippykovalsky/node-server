@@ -41,11 +41,18 @@ export const signIn = async (req, res) => {
         let loggedInUser = await User.findOne({ email });
         if (!loggedInUser)
             return res.status(404).send("no such user found")
-        if(loggedInUser.role==1){
-             let p = await bcrypt.compare(password, loggedInUser.password)
-        if (!p)
-            return res.status(404).send("the password entered is incorrect")
+
+       if (loggedInUser.role !== 1) {
+            if (password !== loggedInUser.password) {
+                return res.status(404).send("the password entered is incorrect");
+            }
+        } else {
+            let p = await bcrypt.compare(password, loggedInUser.password);
+            if (!p)
+                return res.status(404).send("the password entered is incorrect");
         }
+
+
        
         let token = generateToken(loggedInUser);
         let { _id, userName, role, email: mail, address } = loggedInUser;

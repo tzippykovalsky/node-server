@@ -67,6 +67,25 @@ export const signIn = async (req, res) => {
 }
 
 
+export const signUpWithGoogle=async(req,res)=>{
+
+    try{
+            let { email, userName} = req.body;
+    let sameEmail = await User.findOne({ email });
+    if (sameEmail)
+        return res.status(409).send("your email already exists in the database, you will not be able to register with it again")
+        let newUser = await User.create({ email,userName});
+        let token = generateToken(newUser);
+        let { _id, userName: name, role, email: mail } = newUser;
+        console.log(newUser);
+        res.status(201).json({ _id, userName: name, role, email: mail, token });
+    }
+    catch(err){
+        res.status(400).send("an error occurred while adding a new user with google");
+        console.log(err.message);
+    }
+
+}
 
 
 export const signInGoogle = async (req, res) => {

@@ -66,6 +66,28 @@ export const signIn = async (req, res) => {
 
 }
 
+
+
+
+export const signInGoogle = async (req, res) => {
+    try {
+        let { email } = req.body;
+        let loggedInUser = await User.findOne({ email });
+        if (!loggedInUser)
+            return res.status(404).send("no such user found")
+        let token = generateToken(loggedInUser);
+        let { _id, userName, role, email: mail, address } = loggedInUser;
+        res.status(200).json({ _id, userName, role, email: mail, address, token })
+    }
+    catch
+    (err) {
+        res.status(400).send("an error occurred while signin with google");
+        console.log(err.message);
+    }
+}
+
+
+
 export const getAllUsers = async (req, res) => {
     try {
         let allUsers = await User.find({}, "-password").sort({ "userName": 1 });

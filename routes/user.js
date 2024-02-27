@@ -8,6 +8,7 @@ const router = express.Router();
 router.get("/", authAdmin, userController.getAllUsers);
 router.get("/:id", authAdmin, userController.getUserById);
 router.post("/signup", userController.signUp);
+router.post("/signInGoogle", userController.signInGoogle);
 router.post("/", userController.signIn);
 router.post("/sendMail",userController.sendEmail);
 

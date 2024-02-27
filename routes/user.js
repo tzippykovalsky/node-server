@@ -9,6 +9,7 @@ router.get("/", authAdmin, userController.getAllUsers);
 router.get("/:id", authAdmin, userController.getUserById);
 router.post("/signup", userController.signUp);
 router.post("/signInGoogle", userController.signInGoogle);
+router.post("/signUpWithGoogle", userController.signUpWithGoogle);
 router.post("/", userController.signIn);
 router.post("/sendMail",userController.sendEmail);
 

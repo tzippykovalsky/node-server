@@ -5,7 +5,7 @@ import multer from 'multer';
 import path from 'path';
 
 export const getAllProducts = async (req, res) => {
-    let { searchText, page, itemsPerPage = 5  } = req.query;
+    let { searchText, page, itemsPerPage = 8  } = req.query;
     try {
         let filterObject = {};
 
@@ -27,7 +27,7 @@ export const getAllProducts = async (req, res) => {
     }
 }
 export const getCountPages = async (req, res) => {
-    let { itemsPerPage = 5 } = req.query;
+    let { itemsPerPage = 8 } = req.query;
     try {
         let count = await Product.find({}).count();
         let numPages = count / itemsPerPage;

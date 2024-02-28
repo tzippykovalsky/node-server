@@ -7,9 +7,15 @@ import path from 'path';
 export const getAllProducts = async (req, res) => {
     let { searchText, page, itemsPerPage = 5 ,category } = req.query;
     try {
-        let filterObject = {category}
+        let filterObject = {};
+
+         if (category) {
+            filterObject.category = category;
+        }
+        
         if (searchText)
             filterObject.name = new RegExp(searchText, "i")//מתעלם מאותיות קטנות/גדולותi  יצירת תנאי חיפוש טקסט חופשי בשאילתה
+        
         let allProducts = await Product.find(filterObject)
             .skip((page - 1) * itemsPerPage)//דילוג- מביא אותי לפריטים הספציפיים לפי העמוד שביקשתי
             .limit(itemsPerPage)

@@ -43,8 +43,8 @@ export const orderValidator = (orderToValidate) => {
             price: Joi.number().min(0).required(),
             company: Joi.string(),
             quantity: Joi.number().min(1).required(),
-            isOrderSent: Joi.boolean().default(false),
-        })),
+            
+        }).unknown()),
      
     }).unknown();
 

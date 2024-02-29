@@ -14,8 +14,13 @@ export const getAllProducts = async (req, res) => {
         if (searchText)
             filterObject.name = new RegExp(searchText, "i")//מתעלם מאותיות קטנות/גדולותi  יצירת תנאי חיפוש טקסט חופשי בשאילתה
 
-          if (category!=null)
-            filterObject.category = category;
+          // if (category!=null)
+          //   filterObject.category = category;
+        if (category && category.trim() !== '') {
+   
+                     filterObject.category = category.trim();
+         }
+
         
         let allProducts = await Product.find(filterObject)
             .skip((page - 1) * itemsPerPage)//דילוג- מביא אותי לפריטים הספציפיים לפי העמוד שביקשתי

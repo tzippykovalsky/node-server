@@ -5,7 +5,7 @@ import multer from 'multer';
 import path from 'path';
 
 export const getAllProducts = async (req, res) => {
-    let { searchText, page, itemsPerPage = 8  } = req.query;
+    let { searchText, page, itemsPerPage = 8 ,category  } = req.query;
     try {
         let filterObject = {};
 
@@ -13,6 +13,9 @@ export const getAllProducts = async (req, res) => {
         
         if (searchText)
             filterObject.name = new RegExp(searchText, "i")//מתעלם מאותיות קטנות/גדולותi  יצירת תנאי חיפוש טקסט חופשי בשאילתה
+
+          if (category)
+            filterObject.category = category;
         
         let allProducts = await Product.find(filterObject)
             .skip((page - 1) * itemsPerPage)//דילוג- מביא אותי לפריטים הספציפיים לפי העמוד שביקשתי

@@ -32,9 +32,15 @@ export const getAllProducts = async (req, res) => {
     }
 }
 export const getCountPages = async (req, res) => {
-    let { itemsPerPage = 8 } = req.query;
+    let { itemsPerPage = 8,category } = req.query;
     try {
-        let count = await Product.find({}).count();
+
+       let filterObject = {};
+
+        if (category !="ללא") {
+            filterObject.category = category;
+        }
+        let count = await Product.find(filterObject).count();
         let numPages = count / itemsPerPage;
         res.json(numPages).status(200)
     }

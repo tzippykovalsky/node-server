@@ -13,7 +13,8 @@ const productSchema = mongoose.Schema({
     imgUrl2: String,
     userAdded: String,
     inSale: { type: Boolean, default: false },
-    quantityInStock:Number
+    quantityInStock:Number,
+    description:String
 });
 
 export const Product = mongoose.model("products", productSchema);

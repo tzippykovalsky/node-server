@@ -128,7 +128,7 @@ export const addPoduct = async (req, res) => {
           return res.status(500).send('Error uploading image.');
         }
         let originalFilename = req.file.originalname;
-        let { name, size, color, company, category, price, imgUrl, imgUrl2, quantityInStock } = req.body;
+        let { name, size, color, company, category, price, imgUrl, imgUrl2, quantityInStock, description } = req.body;
         let validate = productValidator(req.body);
     
         if (validate) {
@@ -142,7 +142,7 @@ export const addPoduct = async (req, res) => {
         }
     
         try {
-          let newProduct = await Product.create({ name, size, color, company, category, price, imgUrl:originalFilename, imgUrl2, quantityInStock, userAdded: req.myUser._id });
+          let newProduct = await Product.create({ name,description, size, color, company, category, price, imgUrl:originalFilename, imgUrl2, quantityInStock, userAdded: req.myUser._id });
           res.status(201).json(newProduct);
         } catch (err) {
           console.error(err);
@@ -151,31 +151,12 @@ export const addPoduct = async (req, res) => {
       });
 }
 
-// export const addPoduct = async (req, res) => {
-//     let { name, size, color, company, category, price, imgUrl,imgUrl2, quantityInStock } = req.body;
-//     let validate = productValidator(req.body);
-//     if (validate)
-//         return res.status(400).send(validate);
-//     let sameProduct = await Product.findOne({ name, company });
-//     if (sameProduct)
-//         return res.status(409).send("A product with the same name and size already exists.");
 
-
-//     try {
-//         let newProduct = await Product.create({ name, size, color, company, category, price,imgUrl2, imgUrl, userAdded: req.myUser._id, quantityInStock })
-//         res.status(201).json(newProduct)
-//     }
-//     catch (err) {
-//         console.log(err);
-//         return res.status(400).send("problem in adding a new product")
-
-//     }
-// }
 
 export const updateProduct = async (req, res) => {
     try {
         let { id } = req.params;
-        let { name, size, color, company, category, price, imgUrl,imgUrl2, quantityInStock } = req.body;
+        let { name, size, color, company, category, price, imgUrl,imgUrl2, quantityInStock,description } = req.body;
         if (!mongoose.isValidObjectId(id))
             return res.status(400).send("invalid paramter id");
 
@@ -198,6 +179,7 @@ export const updateProduct = async (req, res) => {
         productToUpdate.imgUrl = imgUrl || productToUpdate.imgUrl;
         productToUpdate.imgUrl2 = imgUrl2 || productToUpdate.imgUrl2;
         productToUpdate.quantityInStock = quantityInStock || productToUpdate.quantityInStock;
+        productToUpdate.description = description || productToUpdate.description;
 
         await productToUpdate.save();
         res.status(200).json(productToUpdate);

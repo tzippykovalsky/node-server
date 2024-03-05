@@ -22,7 +22,7 @@ export const getAllProducts = async (req, res) => {
         let allProducts = await Product.find(filterObject)
             .skip((page - 1) * itemsPerPage)//דילוג- מביא אותי לפריטים הספציפיים לפי העמוד שביקשתי
             .limit(itemsPerPage)
-            .sort({ "name": 1 })
+            .sort({ "dateAdded": 1 })
 
         res.json(allProducts);
     }

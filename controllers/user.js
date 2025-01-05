@@ -163,7 +163,12 @@ export const sendEmail = async (req, res) => {
         from: process.env.MAIL,
         to: to,
         subject: subject,
-     html: `<p style="direction: rtl; font-family: 'Arial', sans-serif; font-size: 16px; margin-bottom:100px;">${text}</p>
+     html: `<p style="direction: rtl; font-family: 'Arial', sans-serif; font-size: 16px; margin-bottom:100px;">${text}
+      לכניסה לאתר לחצו על הקישור ואח"כ היכנסו לדף הבית
+      <br/>
+      האתר בשיפוץ יתכן ויהיו בעיות
+      מתנצלים על אי הנוחות הזמנית
+      </p>
                <p style="text-align: right; position: absolute; bottom: 1000px; right: 50px;">
                    <a href="${websiteUrl}" style="padding: 10px 20px; background-color: #000; color: #fff; text-decoration: none; border-radius: 5px; font-size: 18px;">בקר באתר</a>
                </p>`,

@@ -144,7 +144,7 @@ export const getUserById = async (req, res) => {
 export const sendEmail = async (req, res) => {
     
     const { to, subject, text } = req.body;
-    const websiteUrl = 'http://localhost:3000'; // Replace this with your website URL
+    const websiteUrl = 'https://tzippykovalsky.github.io/'; // Replace this with your website URL
 
     // Create a Nodemailer transporter
     let transporter = nodemailer.createTransport({

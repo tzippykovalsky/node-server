@@ -46,7 +46,7 @@ export const getCountPages = async (req, res) => {
     }
     catch (err) {
         console.log(err);
-        res.status(400).send("an error in getting num pages")
+        res.status(400).send(err.message)
     }
 }
 

@@ -47,7 +47,7 @@ export const signIn = async (req, res) => {
                 return res.status(404).send("the password entered is incorrect");
             }
         } else {
-            let p = await bcrypt.compare(password, loggedInUser.password);
+            let p = await bcrypt.compare(password, loggedInUser.password); 
             if (!p)
                 return res.status(404).send("the password entered is incorrect");
         }
@@ -88,7 +88,7 @@ export const signUpWithGoogle=async(req,res)=>{
 }
 
 
-export const signInGoogle = async (req, res) => {
+export const signInGoogle = async (req, res) => { 
     try {
         let { email } = req.body;
         let loggedInUser = await User.findOne({ email });

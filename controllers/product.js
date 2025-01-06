@@ -109,9 +109,7 @@ const storage = multer.diskStorage({
         cb(null, 'staticFile/images/');
     },
     filename: function (req, file, cb) {
-        // Extract the original filename from the file object
         const originalFilename = file.originalname;
-
         cb(null, originalFilename);
     }
 });
@@ -148,7 +146,7 @@ export const addPoduct = async (req, res) => {
           console.error(err);
           return res.status(400).send("Problem in adding a new product.");
         }
-      });
+      }); 
 }
 
 

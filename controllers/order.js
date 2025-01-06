@@ -57,7 +57,6 @@ export const updateOrder = async (req, res) => {
     res.status(500).send('failed to update order');
     console.log(err);
   }
-
 }
 
 

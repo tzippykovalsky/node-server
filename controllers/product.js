@@ -40,8 +40,9 @@ export const getCountPages = async (req, res) => {
         if (category !="ללא") {
             filterObject.category = category;
         }
-        let count = await Product.find(filterObject).count();// פונקציה הוצאה משימוש בגרסת מונגו 5+
-        // let count = await Product.countDocuments(filterObject);במחשב עובד כאן לא למרות שעל אותו דטה לבדוק
+        //let count = await Product.find(filterObject).count();// פונקציה הוצאה משימוש בגרסת מונגו 5+
+        let count = await Product.countDocuments(filterObject);//;במחשב עובד כאן לא למרות שעל אותו דטה לבדוק
+        
         let numPages = count / itemsPerPage;
         res.json(numPages).status(200)
     }

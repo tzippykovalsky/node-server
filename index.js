@@ -7,6 +7,7 @@ import { errorsHndling } from "./middlewares/errorsHndling.js";
 import productRouter from "./routes/product.js";
 import userRouter from "./routes/user.js";
 import orderRouter from "./routes/order.js";
+import emailRouter from "./routes/email.js";
 
 
 config();
@@ -17,6 +18,8 @@ app.use(cors());
 app.use(morgan("common"))//פרוט בטרמינל שמישהו ניגש לשרת
 app.use(express.static('staticFile/images'))
 app.use(express.json())
+
+app.use("/api/email", emailRouter);
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter)

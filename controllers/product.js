@@ -2,7 +2,11 @@
 import { Product, productValidator, productValidator2 } from "../models/product.js";
 import mongoose from "mongoose";
 import multer from 'multer';
+import cloudinary from 'cloudinary';
 import path from 'path';
+import { config } from "dotenv";
+
+config();
 
 export const getAllProducts = async (req, res) => {
     let { searchText, page, itemsPerPage = 8 ,category  } = req.query;
@@ -91,63 +95,120 @@ export const deleteProductById = async (req, res) => {
     }
 }
 
-// const storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//       cb(null, 'staticFile/images/');
-//     },
-//     filename: function(req, file, cb) {
-//       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-//       cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-//     }
-//   });
-  
-//   const upload = multer({ storage: storage }).single('file');
+console.log(process.env.CLOUDINARY_CLOUD_NAME);
+console.log(process.env.CLOUDINARY_API_SECRET);
 
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'staticFile/images/');
-    },
-    filename: function (req, file, cb) {
-        const originalFilename = file.originalname;
-        cb(null, originalFilename);
-    }
+// **הגדרת Cloudinary**
+cloudinary.v2.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-const upload = multer({ storage: storage }).single('file');
-
+// **שימוש ב-Multer לשמירה בזיכרון במקום בדיסק**
+const storage = multer.memoryStorage();
+const upload = multer({ storage }).single('file');
 
 export const addPoduct = async (req, res) => {
-    
-
     upload(req, res, async (err) => {
         if (err) {
-          console.error(err);
-          return res.status(500).send('Error uploading image.');
+            console.error(err);
+            return res.status(500).send('Error uploading image.');
         }
-        let originalFilename = req.file.originalname;
-        let { name, size, color, company, category, price, imgUrl, imgUrl2, quantityInStock, description } = req.body;
+
+        let { name, size, color, company, category, price, imgUrl2, quantityInStock, description } = req.body;
         let validate = productValidator(req.body);
-    
+
         if (validate) {
-          return res.status(400).send(validate);
+            return res.status(400).send(validate);
         }
-    
+
         let sameProduct = await Product.findOne({ name, company });
-    
+
         if (sameProduct) {
-          return res.status(409).send("A product with the same name and size already exists.");
+            return res.status(409).send("A product with the same name and size already exists.");
         }
-    
+
         try {
-          let newProduct = await Product.create({ name,description, size, color, company, category, price, imgUrl:originalFilename, imgUrl2, quantityInStock, userAdded: req.myUser._id });
-          res.status(201).json(newProduct);
+            // **העלאת התמונה ל-Cloudinary**
+            const cloudinaryResponse = await new Promise((resolve, reject) => {
+                cloudinary.v2.uploader.upload_stream(
+                    { resource_type: "image" },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                ).end(req.file.buffer);
+            });
+
+            // **שמירת ה-URL שחזר מ-Cloudinary**
+            let newProduct = await Product.create({
+                name,
+                description,
+                size,
+                color,
+                company,
+                category,
+                price,
+                imgUrl: cloudinaryResponse.secure_url, // 🔹 כאן נשמר ה-URL של התמונה
+                imgUrl2,
+                quantityInStock,
+                userAdded: req.myUser._id
+            });
+
+            res.status(201).json(newProduct);
         } catch (err) {
-          console.error(err);
-          return res.status(400).send("Problem in adding a new product.");
+            console.error(err);
+            return res.status(400).send("Problem in adding a new product.");
         }
-      }); 
-}
+    });
+};
+
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, 'staticFile/images/');
+//     },
+//     filename: function (req, file, cb) {
+//         const originalFilename = file.originalname;
+//         cb(null, originalFilename);
+//     }
+// });
+
+// const upload = multer({ storage: storage }).single('file');
+
+
+// export const addPoduct = async (req, res) => {
+    
+
+//     upload(req, res, async (err) => {
+//         if (err) {
+//           console.error(err);
+//           return res.status(500).send('Error uploading image.');
+//         }
+//         let originalFilename = req.file.originalname;
+//         let { name, size, color, company, category, price, imgUrl, imgUrl2, quantityInStock, description } = req.body;
+//         let validate = productValidator(req.body);
+    
+//         if (validate) {
+//           return res.status(400).send(validate);
+//         }
+    
+//         let sameProduct = await Product.findOne({ name, company });
+    
+//         if (sameProduct) {
+//           return res.status(409).send("A product with the same name and size already exists.");
+//         }
+    
+//         try {
+//           let newProduct = await Product.create({ name,description, size, color, company, category, price, imgUrl:originalFilename, imgUrl2, quantityInStock, userAdded: req.myUser._id });
+//           res.status(201).json(newProduct);
+//         } catch (err) {
+//           console.error(err);
+//           return res.status(400).send("Problem in adding a new product.");
+//         }
+//       }); 
+// }
 
 
 

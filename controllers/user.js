@@ -136,4 +136,3 @@ export const getUserById = async (req, res) => {
         res.status(400).send("problem in getting user id " + id)
         console.log(err);
     }
-}

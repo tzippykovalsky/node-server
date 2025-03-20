@@ -11,7 +11,6 @@ router.post("/signup", userController.signUp);
 router.post("/signInGoogle", userController.signInGoogle);
 router.post("/signUpWithGoogle", userController.signUpWithGoogle);
 router.post("/", userController.signIn);
-router.post("/sendMail",userController.sendEmail);
 
 export default router;
 

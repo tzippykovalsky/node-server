@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
 import { User, userValidator, userValidator2 } from "../models/user.js"
 import bcrypt from "bcryptjs";
-import { generateToken } from "../config/jwt.js";
+import { generateToken } from "../utils/token.js";
 
 
+/**
+ * Handles user registration.
+ * Validates user input, checks if the email already exists, 
+ * hashes the password, saves the user, and returns a token.
+ */
 export const signUp = async (req, res) => {
     try {
         let { userName, email, password, address: { city, street } } = req.body;
@@ -30,6 +35,11 @@ export const signUp = async (req, res) => {
 }
 
 
+/**
+ * Handles user login.
+ * Validates credentials, checks if the user exists, compares passwords, 
+ * and returns a token on successful authentication.
+ */
 export const signIn = async (req, res) => {
     try {
         let { password, email } = req.body;
@@ -63,7 +73,10 @@ export const signIn = async (req, res) => {
 
 }
 
-
+/**
+ * Handles Google-based user registration.
+ * Checks if the email exists and creates a new user if not.
+ */
 export const signUpWithGoogle=async(req,res)=>{
 
     try{
@@ -85,6 +98,10 @@ export const signUpWithGoogle=async(req,res)=>{
 }
 
 
+/**
+ * Handles Google-based user login.
+ * Checks if the email exists and returns a token if found.
+ */
 export const signInGoogle = async (req, res) => { 
     try {
         let { email } = req.body;
@@ -102,8 +119,9 @@ export const signInGoogle = async (req, res) => {
     }
 }
 
-
-
+/**
+ * Retrieves all users from the database, excluding passwords.
+ */
 export const getAllUsers = async (req, res) => {
     try {
         let allUsers = await User.find({}, "-password").sort({ "userName": 1 });
@@ -116,7 +134,9 @@ export const getAllUsers = async (req, res) => {
 
 }
 
-
+/**
+ * Retrieves a specific user by ID, excluding the password field.
+ */
 export const getUserById = async (req, res) => {
 
     let { id } = req.params;

@@ -1,15 +1,15 @@
-import { sendEmailServise } from '../service/email.js';
+import { sendEmailService } from '../service/email.js';
 
 export const sendEmail = async (req, res) => {
 
     const { to, subject, text, htmlContent } = req.body;
 
-    if (!to || !subject || (!text && !htmlContent)) {
-        return res.status(400).send("Missing required fields: 'to', 'subject', and either 'text' or 'htmlContent'");
+    if (!to || !subject || !text || !htmlContent) {
+        return res.status(400).send("Missing required fields: 'to', 'subject', 'text' and 'htmlContent'");
     }
-    try {
 
-        await sendEmailServise(to, subject, text, htmlContent);
+    try {
+        await sendEmailService(to, subject, text, htmlContent);
         console.log('Email sent successfully');
         res.status(200).send('Email sent successfully');
     } catch (error) {

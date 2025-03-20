@@ -4,10 +4,7 @@ import morgan from "morgan";
 import { connectToDB } from "./config/DBconfig.js";
 import cors from "cors";
 import { errorsHndling } from "./middlewares/errorsHndling.js";
-import productRouter from "./routes/product.js";
-import userRouter from "./routes/user.js";
-import orderRouter from "./routes/order.js";
-import emailRouter from "./routes/email.js";
+import apiRouter from "./routes/api.js";
 
 
 config();
@@ -19,10 +16,8 @@ app.use(morgan("common"))//פרוט בטרמינל שמישהו ניגש לשר�
 app.use(express.static('staticFile/images'))
 app.use(express.json())
 
-app.use("/api/email", emailRouter);
-app.use("/api/products", productRouter);
-app.use("/api/users", userRouter);
-app.use("/api/orders", orderRouter)
+app.use("/api",apiRouter)
+
 app.use(express.urlencoded({ extended: false }));
 app.use(errorsHndling);
 

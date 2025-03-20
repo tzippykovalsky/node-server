@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { User, userValidator, userValidator2 } from "../models/user.js"
 import bcrypt from "bcryptjs";
 import { generateToken } from "../config/jwt.js";
-import nodemailer from 'nodemailer';
 
 
 export const signUp = async (req, res) => {
@@ -51,8 +50,6 @@ export const signIn = async (req, res) => {
             if (!p)
                 return res.status(404).send("the password entered is incorrect");
         }
-
-
        
         let token = generateToken(loggedInUser);
         let { _id, userName, role, email: mail, address } = loggedInUser;

@@ -5,8 +5,8 @@ import { transporter } from "../config/emailConfig.js";
  *
  * @param {string} to - Recipient email address.
  * @param {string} subject - Email subject.
- * @param {string} [text] - Plain text email body (optional).
- * @param {string} [html] - HTML email body (optional).
+ * @param {string} [text] - Plain text email body.
+ * @param {string} [html] - HTML email body.
  * @returns {Promise<{success: boolean, message: string}>} - Status and message.
  */
 export const sendEmailService = async (to, subject, text , html) => {

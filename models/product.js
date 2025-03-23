@@ -1,7 +1,7 @@
 import Joi from "joi";
 import mongoose from "mongoose";
 
-const productSchema = mongoose.Schema({
+const productSchema =new mongoose.Schema({
     name: String,
     size: String,
     color: String,

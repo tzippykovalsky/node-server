@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Joi from 'joi';
 
-const userSchema = mongoose.Schema({
+const userSchema =new mongoose.Schema({
     userName: String,
     password: String,
     email: { type: String, unique: true },

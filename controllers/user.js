@@ -29,7 +29,7 @@ export const signUp = async (req, res) => {
 
     }
     catch (err) {
-        res.status(400).send("an error occurred while adding a new user");
+        res.status(500).send("an error occurred while adding a new user");
         console.log(err.message);
     }
 }
@@ -66,7 +66,7 @@ export const signIn = async (req, res) => {
         res.status(200).json({ _id, userName, role, email: mail, address, token })
     }
     catch (err) {
-        res.status(400).send("an error occurred while signin");
+        res.status(500).send("an error occurred while signin");
         console.log(err.message);
     }
 
@@ -91,7 +91,7 @@ export const signUpWithGoogle=async(req,res)=>{
         res.status(201).json({ _id, userName: name, role, email: mail, token });
     }
     catch(err){
-        res.status(400).send("an error occurred while adding a new user with google");
+        res.status(500).send("an error occurred while adding a new user with google");
         console.log(err.message);
     }
 
@@ -114,7 +114,7 @@ export const signInGoogle = async (req, res) => {
     }
     catch
     (err) {
-        res.status(400).send("an error occurred while signin with google");
+        res.status(500).send("an error occurred while signin with google");
         console.log(err.message);
     }
 }
@@ -128,7 +128,7 @@ export const getAllUsers = async (req, res) => {
         res.status(200).json(allUsers);
     }
     catch (err) {
-        res.status(400).send("error in getting all users");
+        res.status(500).send("error in getting all users");
         console.log(err);
     }
 
@@ -150,7 +150,7 @@ export const getUserById = async (req, res) => {
         res.json(user);
     }
     catch (err) {
-        res.status(400).send("problem in getting user id " + id)
+        res.status(500).send("problem in getting user id " + id)
         console.log(err);
     }
 }

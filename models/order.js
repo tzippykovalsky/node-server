@@ -2,7 +2,7 @@ import Joi from "joi";
 import mongoose from "mongoose";
 
 
-const productSchema = mongoose.Schema({
+const productSchema =new mongoose.Schema({
     productCode: String,//של מוצר _id 
     name: String,
     price: Number,

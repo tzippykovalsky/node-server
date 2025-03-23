@@ -31,7 +31,7 @@ export const getAllProducts = async (req, res) => {
         res.json(allProducts);
     }
     catch (err) {
-        res.status(400).send("error in getting all products");
+        res.status(500).send("error in getting all products");
         console.log(err.message);
     }
 }
@@ -52,7 +52,7 @@ export const getCountPages = async (req, res) => {
     }
     catch (err) {
         console.log(err);
-        res.status(400).send("an error in getting numPages")
+        res.status(500).send("an error in getting numPages")
     }
 }
 
@@ -69,7 +69,7 @@ export const getProductById = async (req, res) => {
         res.json(productId);
     }
     catch (err) {
-        res.status(400).send("problem in getting product id " + req.params.id)
+        res.status(500).send("problem in getting product id " + req.params.id)
         console.log(err);
     }
 }
@@ -93,12 +93,11 @@ export const deleteProductById = async (req, res) => {
         return res.status(200).json(deletedProductId2);
     }
     catch (err) {
-        console.log(err).send("problem in deleting a product");
+        console.log(err)
+        res.status(500).send("problem in deleting a product");
     }
 }
 
-console.log(process.env.CLOUDINARY_CLOUD_NAME);
-console.log(process.env.CLOUDINARY_API_SECRET);
 
 
 // **הגדרת Cloudinary**
@@ -162,7 +161,7 @@ export const addPoduct = async (req, res) => {
             res.status(201).json(newProduct);
         } catch (err) {
             console.error(err);
-            return res.status(400).send("Problem in adding a new product.");
+            return res.status(500).send("Problem in adding a new product.");
         }
     });
 };
@@ -247,7 +246,7 @@ export const updateProduct = async (req, res) => {
 
     }
     catch (err) {
-        res.status(400).send("problem in updating the product")
+        res.status(500).send("problem in updating the product")
         console.log(err.message);
     }
 }

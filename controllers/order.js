@@ -22,7 +22,7 @@ export const addOrder = async (req, res) => {
   }
   catch (err) {
     console.log(err)
-    res.status(400).send("an error occurred while adding a new order");
+    res.status(500).send("an error occurred while adding a new order");
 
   }
 }
@@ -92,6 +92,6 @@ export const getAllOrdersFromCurrentUser = async (req, res) => {
     res.status(200).json(orders);
   } catch (err) {
     console.log(err);
-    res.status(400).send("Cannot fetch all orders of the current user")
+    res.status(500).send("Cannot fetch all orders of the current user")
   }
 }

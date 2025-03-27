@@ -1,3 +1,4 @@
+import { createTestAccount } from 'nodemailer';
 import { sendEmailService } from '../service/email.js';
 
 export const sendEmail = async (req, res) => {
@@ -17,3 +18,18 @@ export const sendEmail = async (req, res) => {
         res.status(500).send('Failed to send email');
     }
 };
+
+export const getAdminEmail = async (req, res) => {
+    try {
+        let email = process.env.MAIL;
+        if (!email) {
+            return res.status(404).send("No admin email found");
+        }
+        res.json({ email });
+    }
+    catch (err) {
+        console.log(err.message);
+        res.status(500).send('Failed to get admin email');
+
+    }
+}
